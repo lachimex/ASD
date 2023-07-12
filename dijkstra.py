@@ -1,30 +1,45 @@
-# dijsktra
 from queue import PriorityQueue
+from math import inf
 
 
-def dijsktra(G, s):
-    distance = [float("inf") for _ in range(len(G))]
-    parent = [-1 for _ in range(len(G))]
+def dijsktra_list(G, s):
+    n = len(G)
+    visited = [False for _ in range(n)]
+    distance = [inf for _ in range(n)]
+    parent = [-1 for _ in range(n)]
     q = PriorityQueue()
+    q.put((0, s))
     distance[s] = 0
-    q.put((s, 0))
     while not q.empty():
-        v, d = q.get()
-        for u, waga in G[v]:
-            if distance[u] > distance[v] + waga:
-                parent[u] = v
-                distance[u] = distance[v] + waga
-                q.put((u, distance[u]))
+        d, v = q.get()
+        visited[v] = True
+        for u, w in G[v]:
+            if not visited[u]:
+                if distance[u] > d + w:
+                    parent[u] = v
+                    distance[u] = d + w
+                    q.put((d+w, u))
     print(distance)
     print(parent)
 
 
-G = [
-    [(1, 2), (2, 7)],
-    [(0, 2), (2, 3), (4, 4)],
-    [(0, 7), (3, 6)],
-    [(2, 6), (1, 4)],
-    [(1, 4), (3, 1)]
-]
-
-dijsktra(G, 0)
+def dijsktra_matrix(G, s):
+    n = len(G)
+    visited = [False for _ in range(n)]
+    distance = [inf for _ in range(n)]
+    parent = [-1 for _ in range(n)]
+    distance[s] = 0
+    for i in range(n):
+        mini = inf
+        curr_v = -1
+        for v in range(n):
+            if not visited[v] and distance[v] < mini:
+                mini = distance[v]
+                curr_v = v
+        visited[curr_v] = True
+        for u in range(n):
+            if not visited[u] and G[curr_v][u] >= 1 and distance[u] > distance[curr_v] + G[curr_v][u]:
+                distance[u] = distance[curr_v] + G[curr_v][u]
+                parent[u] = curr_v
+    print(distance)
+    print(parent)
