@@ -25,11 +25,17 @@ def kruskal(G):
         for u, w in G[v]:
             if v < u:
                 tab.append((v, u, w))
-    tab = sorted(tab, key=lambda tab: tab[2])
+    tab = sorted(tab, key=lambda x: x[2])
     for u, v, w in tab:
         x = find(parent, u)
         y = find(parent, v)
         if x != y:
+            if rank[x] > rank[y]:
+                parent[y] = x
+            else:
+                parent[x] = y
+                if rank[x] == rank[y]:
+                    rank[y] += 1
             union(rank, parent, u, v)
             solution.append((u, v, w))
     print(solution)

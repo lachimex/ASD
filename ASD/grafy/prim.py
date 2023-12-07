@@ -13,7 +13,7 @@ def prim(G, s):
         w, v = q.get()
         inMST[v] = True
         for u, w2 in G[v]:
-            if not inMST[u] and w2 < key:
+            if not inMST[u] and w2 < key[u]:
                 q.put((w2, u))
                 key[u] = w2
                 parent[u] = v
